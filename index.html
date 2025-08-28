@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hero mit p5 Flowfield</title>
+  <style>
+    :root{
+      --ink: #000000;
+      --orange: #EC542B;
+      --cyan: #29BF7F;
+      --blue: #36C1DB;
+      --green: #9FCF8E;
+      --gray: #D9D9D9;
+      --coral: #FF7A5C;
+      --pink: #FFB2EF;
+      --yellow: #FFDB58;
+      --bg: #fffbe6;
+      --accent: #ffd400;
+      --shadow: #111;
+      --radius: 10px; /* Corner Radius Variable */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; background:var(--bg); color:var(--ink); font:16px/1.4 system-ui, Arial, sans-serif; min-height: 3000px;}
+
+    /* Hero-Container */
+    .hero{ position:relative; width:100%; min-height: clamp(420px, 70vh, 900px); overflow:hidden; border-bottom: 3px solid var(--ink); /* Border unten */ }
+    .hero__bg{ position:absolute; inset:0; }   /* Hier sitzt das p5-Canvas drin */
+    .hero__bg canvas{ display:block; width:100%; height:100%; }
+    .hero__content{
+      position:relative;
+      z-index:2;
+      padding: clamp(24px, 4vw, 48px);
+      max-width: 500px;
+      margin: 120px auto 48px auto; /* Mehr Abstand oben für Navbar + Schatten */
+      background: var(--bg);
+      border-radius: var(--radius);
+      box-shadow: 0 16px 40px rgba(17,17,17,0.18), 6px 6px 0 0 #000;
+      border: 2px solid var(--ink);
+    }
+    /* Responsive Abstand für kleinere Screens */
+    @media (max-width: 700px) {
+      .navbar {
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        min-height: 0;
+        max-width: 100vw;
+        width: 100vw;
+      }
+      .hero__content {
+        margin: 110px auto 24px auto; /* Mehr Abstand für Burger + Navbar */
+        box-shadow: 0 8px 24px rgba(17,17,17,0.18), 4px 4px 0 0 #000;
+      }
+    }
+    .btn{ display:inline-block; padding:12px 18px; border:3px solid var(--ink);
+      background:var(--accent); box-shadow:6px 6px 0 var(--shadow); font-weight:800; color:var(--ink); text-decoration:none; }
+
+    /* Projekte Section */
+    .projects {
+      padding: clamp(32px, 6vw, 64px) 0;
+    }
+    .projects__grid {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .card {
+      flex: 1 1 260px;
+      max-width: 320px;
+      background: #9FCF8E;
+      border-radius: var(--radius);
+      box-shadow: 6px 6px 0 0 #000;
+      border: 3px solid #000;
+      padding: 24px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .card:hover {
+      box-shadow: 12px 12px 0 0 #000;
+      border-color: #000;
+      background: #7EBF6B;
+      transform: translateY(-6px) scale(1.04);
+    }
+    .card__img {
+      width: 100%;
+      height: 140px;
+      background: linear-gradient(135deg, var(--accent) 60%, var(--bg) 100%);
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      box-shadow: 0 4px 12px rgba(17,17,17,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card h3 {
+      margin: 0 0 12px 0;
+      font-size: 1.2em;
+      font-weight: 800;
+    }
+    .card p {
+      margin: 0;
+      font-size: 1em;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .projects__grid { flex-direction: column; align-items: center; }
+    }
+
+    .parallax-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1; /* Ganz nach hinten */
+      pointer-events: none;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .parallax-bg img {
+      position: absolute;
+      will-change: transform;
+      width: 90px; /* deutlich kleiner */
+      opacity: 1; /* dezenter */
+      transition: opacity 0.3s, width 0.3s;
+    }
+    .parallax-bg img.shape1 { top: 10%; left: 5%; }
+    .parallax-bg img.shape2 { top: 60%; left: 70%; }
+    .parallax-bg img.shape3 { top: 40%; left: 30%; }
+    .parallax-bg img.shape4 { top: 75%; left: 15%; }
+    .parallax-bg img.shape5 { top: 20%; left: 80%; }
+    .parallax-bg img.shape6 { top: 55%; left: 50%; }
+    .parallax-bg img.shape7 { top: 35%; left: 85%; }
+    .parallax-bg img.shape8 { top: 80%; left: 60%; }
+    .parallax-bg img.shape9 { top: 5%; left: 60%; }
+    .parallax-bg img.shape10 { top: 65%; left: 40%; }
+    .parallax-bg img.shape11 { top: 25%; left: 10%; }
+    .parallax-bg img.shape12 { top: 45%; left: 75%; }
+    .parallax-bg img.shape13 { top: 15%; left: 50%; }
+
+    /* Unterschiedliche Größen für die Formen */
+    .parallax-bg img.shape-lg { width: 120px; }
+    .parallax-bg img.shape-md { width: 80px; }
+    .parallax-bg img.shape-sm { width: 50px; }
+
+    /* Header-Navigation */
+    header {
+      background: transparent;
+      position: fixed;
+      top: 24px;
+      left: 0;
+      width: 100%;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .navbar {
+      background: var(--accent);
+      border-radius: var(--radius);
+      box-shadow: 6px 6px 0 var(--shadow);
+      border: 3px solid var(--ink);
+      padding: 8px 18px; /* Padding oben/unten und links/rechts */
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      min-height: 56px;
+      max-width: 680px;
+      width: 90vw;
+      pointer-events: auto;
+      position: relative;
+    }
+    nav {
+      display: flex;
+      gap: 12px; /* Mehr Abstand zwischen Links */
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      background: transparent; /* keine extra Farbe */
+    }
+    .nav-link {
+      color: var(--ink);
+      text-decoration: none;
+      padding: 8px 24px; /* Weniger Padding oben/unten, mehr links/rechts */
+      border-radius: var(--radius);
+      transition: background 0.2s;
+      position: relative;
+      font-size: 1.1em;
+      background: transparent;
+      z-index: 1;
+    }
+    .nav-link:hover, .nav-link:focus {
+      background: var(--orange);
+      color: var(--ink);
+    }
+    .nav-link:active {
+      background: var(--orange);
+      color: var(--ink);
+    }
+    .burger {
+      display: none;
+      background: var(--accent);
+      border: 3px solid var(--ink);
+      border-radius: var(--radius);
+      box-shadow: 6px 6px 0 var(--shadow);
+      padding: 10px 14px;
+      cursor: pointer;
+      margin-right: 18px;
+      margin-left: auto;
+      z-index: 2;
+    }
+    .burger span {
+      display: block;
+      width: 28px;
+      height: 4px;
+      background: var(--ink);
+      margin: 5px 0;
+      border-radius: 2px;
+    }
+    @media (max-width: 700px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        background: var(--accent);
+        border-radius: var(--radius);
+        box-shadow: 6px 6px 0 var(--shadow);
+        border: 3px solid var(--ink);
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 220px;
+        z-index: 10;
+        padding: 12px 0;
+      }
+      nav.open {
+        display: flex;
+      }
+      .burger {
+        display: block;
+      }
+    }
+    @media (max-width: 700px) {
+      header {
+        top: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="navbar">
+    <button class="burger" aria-label="Menü öffnen" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav id="mainnav">
+      <a href="#hero" class="nav-link">Home</a>
+      <a href="#work" class="nav-link">Projekte</a>
+      <a href="#about" class="nav-link">Über mich</a>
+      <a href="#contact" class="nav-link">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="parallax-bg">
+    <img src="Neo Brutalismus Formen/Union-1.png" class="shape shape1 shape-lg" alt="Form 1" />
+    <img src="Neo Brutalismus Formen/Ellipse 6.png" class="shape shape2 shape-md" alt="Form 2" />
+    <img src="Neo Brutalismus Formen/Polygon 2.png" class="shape shape3 shape-sm" alt="Form 3" />
+    <img src="Neo Brutalismus Formen/Star 3.png" class="shape shape4 shape-md" alt="Form 4" />
+    <img src="Neo Brutalismus Formen/Star 4.png" class="shape shape5 shape-lg" alt="Form 5" />
+    <img src="Neo Brutalismus Formen/Star 5.png" class="shape shape6 shape-sm" alt="Form 6" />
+    <img src="Neo Brutalismus Formen/Star 6.png" class="shape shape7 shape-md" alt="Form 7" />
+    <img src="Neo Brutalismus Formen/Union-4.png" class="shape shape8 shape-sm" alt="Form 8" />
+    <img src="Neo Brutalismus Formen/Union-2.png" class="shape shape9 shape-lg" alt="Form 9" />
+    <img src="Neo Brutalismus Formen/Union-3.png" class="shape shape10 shape-md" alt="Form 10" />
+    <img src="Neo Brutalismus Formen/Union.png" class="shape shape11 shape-sm" alt="Form 11" />
+    <img src="Neo Brutalismus Formen/Vector-1.png" class="shape shape12 shape-lg" alt="Form 12" />
+    <img src="Neo Brutalismus Formen/Vector.png" class="shape shape13 shape-md" alt="Form 13" />
+</div>
+
+<section id="hero" class="hero">
+  <div id="flowfield" class="hero__bg" aria-hidden="true"></div>
+
+  <div class="hero__content">
+    <h1>Vincent Fagerer — UX/UI</h1>
+    <p>Neo-brutalistischer Hero mit p5.js Flowfield. Zieh die Maus drüber, die Sticker folgen.</p>
+    <a class="btn" href="#work">See work</a>
+  </div>
+</section>
+
+<!-- Projekte Section -->
+<section id="work" class="projects">
+  <h2 style="text-align:center; margin-bottom:32px;">Projekte</h2>
+  <div class="projects__grid">
+    <a class="card" href="#">
+      <div class="card__img"></div>
+      <h3>Projekt 1</h3>
+      <p>Kurze Beschreibung des Projekts. Hier kommt später mehr Info.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="card__img"></div>
+      <h3>Projekt 2</h3>
+      <p>Kurze Beschreibung des Projekts. Hier kommt später mehr Info.</p>
+    </a>
+    <a class="card" href="#">
+      <div class="card__img"></div>
+      <h3>Projekt 3</h3>
+      <p>Kurze Beschreibung des Projekts. Hier kommt später mehr Info.</p>
+    </a>
+  </div>
+</section>
+
+<!-- p5 -->
+<script src="https://cdn.jsdelivr.net/npm/p5@1.11.1/lib/p5.min.js"></script>
+<!-- dein Sketch -->
+<script src="flowfield-hero-sketch.js"></script>
+
+<script>
+  // Parallax Effekt für die Formen
+  window.addEventListener('scroll', function() {
+    const scrolled = window.scrollY;
+    document.querySelectorAll('.parallax-bg img').forEach((img, i) => {
+      // Unterschiedliche Parallax-Geschwindigkeit je nach Form
+      const speed = 0.15 + i * 0.07;
+      img.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+  });
+
+  function toggleMenu() {
+    var nav = document.getElementById('mainnav');
+    nav.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
