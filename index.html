@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Hero mit p5 Flowfield</title>
+  <title>VincentFagerer</title>
   <style>
     :root{
       --ink: #000000;
@@ -39,22 +39,7 @@
       box-shadow: 0 16px 40px rgba(17,17,17,0.18), 6px 6px 0 0 #000;
       border: 2px solid var(--ink);
     }
-    /* Responsive Abstand für kleinere Screens */
-    @media (max-width: 700px) {
-      .navbar {
-        background: transparent;
-        box-shadow: none;
-        border: none;
-        padding: 0;
-        min-height: 0;
-        max-width: 100vw;
-        width: 100vw;
-      }
-      .hero__content {
-        margin: 110px auto 24px auto; /* Mehr Abstand für Burger + Navbar */
-        box-shadow: 0 8px 24px rgba(17,17,17,0.18), 4px 4px 0 0 #000;
-      }
-    }
+    
     .btn{ display:inline-block; padding:12px 18px; border:3px solid var(--ink);
       background:var(--accent); box-shadow:6px 6px 0 var(--shadow); font-weight:800; color:var(--ink); text-decoration:none; }
 
@@ -225,42 +210,165 @@
       margin: 5px 0;
       border-radius: 2px;
     }
+    
     @media (max-width: 700px) {
-      nav {
-        display: none;
-        flex-direction: column;
-        background: var(--accent);
-        border-radius: var(--radius);
-        box-shadow: 6px 6px 0 var(--shadow);
-        border: 3px solid var(--ink);
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 220px;
-        z-index: 10;
-        padding: 12px 0;
-      }
-      nav.open {
-        display: flex;
-      }
-      .burger {
-        display: block;
+    .navbar{
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      width: auto;
+      min-height: 0;
+      margin: 0;
+      pointer-events: auto;
+      z-index: 30;
+    }
+
+    .burger{
+      display: block;
+      background: var(--accent);
+      border: 3px solid var(--ink);
+      border-radius: var(--radius);
+      box-shadow: 6px 6px 0 var(--shadow);
+      padding: 10px 14px;
+      cursor: pointer;
+      margin: 0;
+      z-index: 31;
+    }
+
+    nav{
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 220px;
+      background: var(--accent);
+      border: 3px solid var(--ink);
+      border-radius: var(--radius);
+      box-shadow: 6px 6px 0 var(--shadow);
+      padding: 12px 0;
+      z-index: 32;
+      flex-direction: column;
+      gap: 8px;
+    }
+    nav.open{ display: flex; }
+
+    .nav-link{
+      display: block;
+      padding: 10px 16px;
+      border-radius: 0;
+      background: transparent;
+    }
+    .nav-link:hover, .nav-link:focus{ background: var(--orange); color: var(--ink); }
+
+    .hero__content{
+      margin: 96px auto 24px auto;
+      box-shadow: 0 8px 24px rgba(17,17,17,0.18), 4px 4px 0 0 #000;
+    }
+
+    header{ top: 12px; }
+  }
+
+
+    /* About-Me Section */
+    .about{
+      position: relative;
+      padding: clamp(32px, 6vw, 80px) 16px;
+      border-top: 3px solid var(--ink);
+      border-bottom: 3px solid var(--ink);
+      background: transparent;
+    }
+    .about__grid{
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: clamp(20px, 4vw, 32px);
+    }
+    @media (min-width: 900px){
+      .about__grid{
+        grid-template-columns: minmax(340px, 560px) minmax(260px, 440px);
+        align-items: start;
       }
     }
-    @media (max-width: 700px) {
-      header {
-        top: 12px;
-      }
+    .about__card{
+      background: #fff;
+      color: var(--ink);
+      border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--shadow);
+      border-radius: var(--radius);
+      padding: clamp(20px, 3vw, 28px);
+    }
+    .about__title{
+      margin: 0 0 12px;
+      font-size: clamp(24px, 3.4vw, 36px);
+      line-height: 1.05;
+      font-weight: 900;
+    }
+    .about__lead{
+      margin: 0 0 16px;
+      font-size: clamp(16px, 2vw, 18px);
+      max-width: 60ch;
+    }
+    .about__facts{
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px 16px;
+      margin: 12px 0 16px;
+      padding: 0;
+    }
+    .about__facts dt{
+      font-weight: 800;
+    }
+    .about__facts dd{
+      margin: 0;
+    }
+    .about__links{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn--light{
+      background: #fff;
+    }
+    .btn:focus-visible,
+    .about a:focus-visible{
+      outline: 3px solid var(--ink);
+      outline-offset: 2px;
+    }
+    .about__media{
+      display: grid;
+      place-items: center;
+    }
+    .about__media .about__figure{
+      width: 100%;
+      max-width: 420px;
+      background: var(--yellow);
+      border-radius: var(--radius);
+      border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--shadow);
+      overflow: hidden;
+    }
+    .about__figure img{
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .sr-only{
+      position:absolute!important;
+      width:1px;height:1px;
+      padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
     }
   </style>
 </head>
 <body>
 <header>
   <div class="navbar">
-    <button class="burger" aria-label="Menü öffnen" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button id="burgerBtn" class="burger" aria-label="Menü öffnen" aria-expanded="false" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
     </button>
     <nav id="mainnav">
       <a href="#hero" class="nav-link">Home</a>
@@ -271,29 +379,41 @@
   </div>
 </header>
 
-<div class="parallax-bg">
-    <img src="Neo Brutalismus Formen/Union-1.png" class="shape shape1 shape-lg" alt="Form 1" />
-    <img src="Neo Brutalismus Formen/Ellipse 6.png" class="shape shape2 shape-md" alt="Form 2" />
-    <img src="Neo Brutalismus Formen/Polygon 2.png" class="shape shape3 shape-sm" alt="Form 3" />
-    <img src="Neo Brutalismus Formen/Star 3.png" class="shape shape4 shape-md" alt="Form 4" />
-    <img src="Neo Brutalismus Formen/Star 4.png" class="shape shape5 shape-lg" alt="Form 5" />
-    <img src="Neo Brutalismus Formen/Star 5.png" class="shape shape6 shape-sm" alt="Form 6" />
-    <img src="Neo Brutalismus Formen/Star 6.png" class="shape shape7 shape-md" alt="Form 7" />
-    <img src="Neo Brutalismus Formen/Union-4.png" class="shape shape8 shape-sm" alt="Form 8" />
-    <img src="Neo Brutalismus Formen/Union-2.png" class="shape shape9 shape-lg" alt="Form 9" />
-    <img src="Neo Brutalismus Formen/Union-3.png" class="shape shape10 shape-md" alt="Form 10" />
-    <img src="Neo Brutalismus Formen/Union.png" class="shape shape11 shape-sm" alt="Form 11" />
-    <img src="Neo Brutalismus Formen/Vector-1.png" class="shape shape12 shape-lg" alt="Form 12" />
-    <img src="Neo Brutalismus Formen/Vector.png" class="shape shape13 shape-md" alt="Form 13" />
-</div>
+<div class="parallax-bg"></div>
 
 <section id="hero" class="hero">
   <div id="flowfield" class="hero__bg" aria-hidden="true"></div>
-
   <div class="hero__content">
     <h1>Vincent Fagerer — UX/UI</h1>
     <p>Neo-brutalistischer Hero mit p5.js Flowfield. Zieh die Maus drüber, die Sticker folgen.</p>
     <a class="btn" href="#work">See work</a>
+  </div>
+</section>
+
+<!-- About-Me Section -->
+<section id="about" class="about" aria-labelledby="about-title">
+  <div class="about__grid">
+    <article class="about__card">
+      <h2 id="about-title" class="about__title">Über mich</h2>
+      <p class="about__lead">
+        Ich bin Vincent, ein leidenschaftlicher UX/UI-Designer mit einem Faible für neo-brutalistische Ästhetik und kreative digitale Lösungen.
+      </p>
+      <dl class="about__facts">
+        <dt>Geburtsjahr</dt><dd>1990</dd>
+        <dt>Standort</dt><dd>Berlin, Deutschland</dd>
+        <dt>Interessen</dt><dd>Design, Technologie, Kunst</dd>
+      </dl>
+      <div class="about__links">
+        <a href="#contact" class="btn btn--light">Kontakt aufnehmen</a>
+        <a href="https://www.linkedin.com/in/vincentfagerer/" target="_blank" class="btn btn--light">LinkedIn</a>
+      </div>
+    </article>
+    <aside class="about__media" aria-hidden="true">
+      <figure class="about__figure">
+        <img src="mein-bild.jpg" alt="Ein Bild von mir" />
+        <figcaption class="sr-only">Dekoratives Motiv im Portfolio-Stil</figcaption>
+      </figure>
+    </aside>
   </div>
 </section>
 
@@ -303,17 +423,17 @@
   <div class="projects__grid">
     <a class="card" href="#">
       <div class="card__img"></div>
-      <h3>Projekt 1</h3>
+      <h3>Magnet en Place</h3>
       <p>Kurze Beschreibung des Projekts. Hier kommt später mehr Info.</p>
     </a>
     <a class="card" href="#">
       <div class="card__img"></div>
-      <h3>Projekt 2</h3>
+      <h3>Hells Kitchen</h3>
       <p>Kurze Beschreibung des Projekts. Hier kommt später mehr Info.</p>
     </a>
     <a class="card" href="#">
       <div class="card__img"></div>
-      <h3>Projekt 3</h3>
+      <h3>Kuriosis</h3>
       <p>Kurze Beschreibung des Projekts. Hier kommt später mehr Info.</p>
     </a>
   </div>
@@ -334,12 +454,28 @@
       img.style.transform = `translateY(${scrolled * speed}px)`;
     });
   });
-
-  function toggleMenu() {
-    var nav = document.getElementById('mainnav');
-    nav.classList.toggle('open');
-  }
 </script>
+<script>
+  function toggleMenu() {
+    const nav  = document.getElementById('mainnav');
+    const btn  = document.getElementById('burgerBtn');
+    const open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  // Menü schließen, wenn ein Link geklickt wird
+  document.querySelectorAll('#mainnav .nav-link').forEach(a => {
+    a.addEventListener('click', () => {
+      const nav = document.getElementById('mainnav');
+      const btn = document.getElementById('burgerBtn');
+      if (nav.classList.contains('open')) {
+        nav.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+</script>
+
 
 </body>
 </html>

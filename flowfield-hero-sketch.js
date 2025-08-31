@@ -56,6 +56,8 @@ const sketch = (p) => {
   let resetBtn;
   let mouseCooldownUntil = 0;
 
+  let isInView = true;   // Sichtbarkeit des Containers
+
   const FLOW_DIRECTION = 'up'; // Optionen: 'flowfield', 'down', 'up', 'left', 'right'
   const FLOW_ANGLES = {
     flowfield: 0,
@@ -64,6 +66,8 @@ const sketch = (p) => {
     left: Math.PI,
     right: 0
   };
+
+  let manualPaused = false; // nur für den A-Toggle
 
   // ====== PRELOAD ======
   p.preload = () => {
@@ -92,6 +96,9 @@ const sketch = (p) => {
 
     // Canvas soll sich an Eltern-Container anpassen
     new ResizeObserver(resizeToParent).observe(parentEl);
+
+    // Sichtbarkeits-Logik aktivieren:
+    setupVisibilityPause();
   };
 
   function resizeToParent(){
@@ -256,6 +263,39 @@ const sketch = (p) => {
     legend.style('z-index','3');
   }
 
+  function setupVisibilityPause(){
+    const target = parentEl; // oder heroEl
+
+    // Beobachte, ob der Container im Viewport ist
+    const io = new IntersectionObserver((entries) => {
+      const e = entries[0];
+      isInView = e.isIntersecting && e.intersectionRatio > 0.1;
+      const shouldRun = (document.visibilityState === 'visible') && isInView && !manualPaused;
+
+      if (shouldRun) {
+        if (!p.isLooping()) p.loop();
+      } else {
+        if (p.isLooping()) p.noLoop();
+      }
+    }, {
+      root: null,
+      threshold: [0, 0.1]
+    });
+
+    io.observe(target);
+
+    // Tab/Window im Hintergrund? -> pausieren
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        p.noLoop();
+        console.log('Flowfield: noLoop() wegen Tab-Hintergrund');
+      } else if (isInView) {
+        p.loop();
+        console.log('Flowfield: loop() wegen Tab wieder aktiv');
+      }
+    });
+  }
+
   function doReset(){
     p.noiseSeed(p.millis());
     fieldZ = 0;
@@ -264,6 +304,7 @@ const sketch = (p) => {
     }
     mouseCooldownUntil = p.millis() + 600; // kurz Maus-Einfluss pausieren
     p.background(255, 255, 230);
+    p.redraw(); // erzwingt 1 Frame, auch wenn noLoop aktiv ist
   }
 
   // Pointer (Maus/Touch) + In-Canvas-Check + Cooldown
@@ -311,8 +352,16 @@ const sketch = (p) => {
   p.windowResized = () => resizeToParent();
 
   p.keyPressed = () => {
-    if (p.key.toLowerCase() === 'a') paused = !paused; // Animation toggle mit "A"
-    if (p.key === 's') p.saveCanvas('flowfield', 'png');
+    if (p.key.toLowerCase() === 'a') {
+    manualPaused = !manualPaused;
+    if (manualPaused) {
+      // stoppe die draw-Schleife -> letzter Frame bleibt sichtbar
+      p.noLoop();
+    } else {
+      // setze die draw-Schleife fort
+      p.loop();
+    }
+  }
     if (p.key.toLowerCase() === 'r') doReset(); // "R" triggert Reset
   };
 };
