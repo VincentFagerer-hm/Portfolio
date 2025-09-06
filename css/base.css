@@ -1,0 +1,41 @@
+/* ===========================
+   Base / Reset / Utilities
+=========================== */
+*{ box-sizing: border-box; }
+html, body { height: 100%; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  min-height: 3000px;
+}
+h1, h2{
+  font-weight: 700;                 /* Space Grotesk 300–700 verfügbar */
+  letter-spacing: -0.01em;          /* leicht enger = knackiger */
+}
+
+.btn, .nav-link{ font-weight: 700; }
+
+h3{ font-weight: 400; }
+
+p{
+  margin: 0 0 16px 0;
+  font-size: clamp(16px, 2vw, 18px);
+  max-width: 45ch; /* angenehm lesbare Zeilenlänge */
+}
+/* Sanftes Scrollen + Standard-Offset für Anker */
+html{
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-offset);
+}
+/* Alle Sektionen mit ID bekommen Abstand zur fixen Navbar */
+section[id], [id].anchor-target{ scroll-margin-top: var(--nav-offset); }
+
+/* Screenreader only */
+.sr-only{
+  position:absolute!important; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}

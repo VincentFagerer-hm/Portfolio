@@ -1,0 +1,15 @@
+/* ===========================
+   Buttons
+=========================== */
+.btn{
+  display:inline-block;
+  padding:12px 18px;
+  border:3px solid var(--ink);
+  background:var(--accent);
+  box-shadow:6px 6px 0 var(--shadow);
+  font-weight:800;
+  color:var(--ink);
+  text-decoration:none;
+}
+.btn--light{ background:#fff; }
+.btn:focus-visible{ outline:3px solid var(--ink); outline-offset:2px; }

@@ -1,0 +1,24 @@
+/* ===========================
+   Parallax Background (optional)
+=========================== */
+.parallax-bg{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+}
+.parallax-bg img{
+  position: absolute;
+  will-change: transform;
+  width: 90px;
+  opacity: 1;
+  transition: opacity 0.3s, width 0.3s;
+}
+
+/* Beispiele für Position/Größenklassen (falls genutzt) */
+.parallax-bg img.shape-lg { width: 120px; }
+.parallax-bg img.shape-md { width: 80px; }
+.parallax-bg img.shape-sm { width: 50px; }
+/* .parallax-bg img.shape1 { top: 10%; left: 5%; } etc. */

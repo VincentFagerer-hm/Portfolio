@@ -1,0 +1,80 @@
+/* ===========================
+   Header / Navbar / Burger
+=========================== */
+header{
+  background: transparent;
+  position: fixed;
+  top: 24px; left: 0;
+  width: 100%;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.navbar{
+  background: var(--accent);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--shadow);
+  border: 3px solid var(--ink);
+  padding: 8px 18px;
+  margin: 0 auto;
+  display: flex; align-items: center;
+  min-height: 56px;
+  max-width: 680px; width: 90vw;
+  pointer-events: auto;
+  position: relative;
+}
+
+nav{
+  display: flex; gap: 12px;
+  flex: 1; justify-content: center; align-items: center;
+  font-weight: 700; background: transparent;
+}
+
+.nav-link{
+  color: var(--ink);
+  text-decoration: none;
+  padding: 8px 24px;
+  border-radius: var(--radius);
+  transition: background 0.2s;
+  position: relative;
+  font-size: 1.1em;
+  background: transparent;
+  z-index: 1;
+}
+.nav-link:hover, .nav-link:focus{ background: var(--orange); color: var(--ink); }
+.nav-link:active{ background: var(--orange); color: var(--ink); }
+
+/* Burger */
+.burger{
+  display:none;
+  background: var(--accent);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--shadow);
+  padding: 10px 14px; cursor: pointer;
+  margin-right: 18px; margin-left: auto;
+  z-index: 2;
+}
+.burger span{ display:block; width:28px; height:4px; background:var(--ink); margin:5px 0; border-radius:2px; }
+
+/* Mobile: nur Burger sichtbar, Menu klappt darunter */
+@media (max-width:700px){
+  header{ top: 12px; }
+  .navbar{
+    position: fixed; top: 12px; right: 12px;
+    background: transparent; border: none; box-shadow: none;
+    padding: 0; width: auto; min-height: 0; margin: 0;
+    pointer-events: auto; z-index: 30;
+  }
+  .burger{ display:block; margin:0; z-index:31; }
+  nav{
+    display:none; position:absolute; top: calc(100% + 8px); right:0; width:220px;
+    background: var(--accent); border:3px solid var(--ink);
+    border-radius: var(--radius); box-shadow:6px 6px 0 var(--shadow);
+    padding:12px 0; z-index:32; flex-direction:column; gap:8px;
+  }
+  nav.open{ display:flex; }
+  .nav-link{ display:block; padding:10px 16px; border-radius:0; }
+}

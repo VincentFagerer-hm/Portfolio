@@ -1,0 +1,14 @@
+/* main.css */
+@layer tokens, base, components, layout, sections;
+
+/* Reihenfolge = Wichtigkeit */
+@import url('./tokens.css') layer(tokens);
+@import url('./base.css') layer(base);
+@import url('./components/buttons.css') layer(components);
+@import url('./layout/header.css') layer(layout);
+
+/* Sections */
+@import url('./sections/hero.css') layer(sections);
+@import url('./sections/about.css') layer(sections);
+@import url('./sections/projects.css') layer(sections);
+@import url('./sections/parallax.css') layer(sections);

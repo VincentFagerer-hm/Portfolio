@@ -1,0 +1,25 @@
+/* ===========================
+   Design Tokens (Farben, Radii)
+=========================== */
+:root{
+  --ink: #000000;
+  --orange: #EC542B;
+  --cyan: #29BF7F;
+  --blue: #36C1DB;
+  --green: #9FCF8E;
+  --gray: #D9D9D9;
+  --coral: #FF7A5C;
+  --pink: #FFB2EF;
+  --yellow: #FFDB58;
+  --bg: #E3DFF2;
+  --bg-cards: #FFFBE6;
+  --accent: #ffd400;
+  --shadow: #111;
+  --radius: 10px;
+
+  /* Offset, damit Ankerziele nicht unter die fixe Navbar rutschen */
+  --nav-offset: 96px;
+}
+@media (max-width:700px){
+  :root{ --nav-offset: 80px; }
+}
