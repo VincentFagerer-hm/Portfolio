@@ -37,7 +37,9 @@ const sketch = (p) => {
     "assets/formen/Vector.png",
     "assets/formen/Flower.png",
     "assets/formen/Flower 1.png",
-    "assets/formen/Flower 2.png", 
+    "assets/formen/Flower 2.png",
+    "assets/formen/Fahrrad Icon.png",
+    "assets/formen/Brezl.png",
   ];
 
   const prefersReduced = typeof window !== 'undefined'
